@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago Servicios</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="cajero">
+    <header>
+      <div class="logo-container">
+        <img src="imagenes/logo.png" alt="Logo del banco">
+        <h1>Bienvenido a StartBank</h1>
+      </div>
+      <h2>PAGO DE SERVICIOS</h2>
+    </header>
+    <main>
+        <section class="opciones-tarjeta especial">
+        <button id="tarjeta-servicios" onclick="window.location.href = 'pagoservicio.html'">
+          <img src="imagenes/CFE.png" alt="Pago de servicios">
+        </button>
+        <button id="depositar-cuenta" onclick="window.location.href = 'depositar-cuenta.html'">
+          <img src="imagenes/SKY.png" alt="Depositar a cuenta">
+        </button>
+        <button id="retirar-dinero" onclick="window.location.href = 'retirar-dinero.html'">
+          <img src="imagenes/telmex.png" alt="Retirar dinero">
+        </button>
+        <button id="pagar-tarjeta" onclick="window.location.href = 'pagar-tarjeta.html'">
+          <img src="imagenes/totalplay.png" alt="Pagar tarjeta">
+        </button>
+        <button id="transferir-fondos" onclick="window.location.href = 'transferir-fondos.html'">
+          <img src="imagenes/movistar.png" alt="Transferir fondos">
+        </button>
+      </section>
+    </main>
+    <footer>
+      <button id="salir">SALIR</button>
+    </footer>
+  </div>
+</body>
+</html>

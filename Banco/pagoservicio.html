@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago de Servicio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body ng-controller="pagoServicioCtrl">
+  <div id="cajero">
+    <header>
+      <div class="logo-container">
+        <img src="imagenes/logo.png" alt="Logo del banco">
+        <h1>Bienvenido a StartBank</h1>
+      </div>
+      <h2>¡HOLA!</h2>
+    </header>
+
+    <main>
+      <section class="pantalla">
+        <div class="formulario">
+          <div class="referencia-monto">
+            <div class="numero-tarjeta">
+              <h1> INGRESA LA REFERENCIA DEL SERVICIO</h1>
+              <h1>↓</h1>
+              <input type="text" ng-model="servicio.referencia" maxlength="16">
+            </div>
+            <div class="numero-tarjeta">
+              <h1> INGRESA EL MONTO A PAGAR</h1>
+              <h1>↓</h1>
+              <input type="text" ng-model="servicio.monto" maxlength="10">
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <button id="regresar" ng-click="regresar()">REGRESAR</button>
+      <button id="pagar" ng-click="pagarServicio()">PAGAR</button>
+    </footer>
+  </div>
+  <script src="angular.min.js"></script>
+  <script>
+    var app = angular.module('Banco', []);
+    app.controller('pagoServicioCtrl', ['$scope', '$http', function ($scope, $http) {
+      $scope.servicio = {
+        referencia: "",
+        monto: ""
+      };
+
+      $scope.regresar = function () {
+        window.location.href = "menuprincipal.html";
+      };
+
+      $scope.pagarServicio = function () {
+        var referencia = $scope.servicio.referencia;
+        var monto = $scope.servicio.monto;
+
+        // Verificar que los campos no estén vacíos
+        if (referencia === "" || monto === "") {
+          alert("Por favor, ingrese la referencia del servicio y el monto a pagar.");
+          return;
+        }
+
+        // Realizar la llamada a la API para pagar el servicio
+        var pagoServicio = {
+          referencia: referencia,
+          monto: monto
+        };
+
+        $http.post('http://localhost:5006/api/PagosServicios', pagoServicio)
+          .then(function (response) {
+            alert("Pago realizado exitosamente.");
+          })
+          .catch(function (error) {
+            alert("Error al procesar el pago del servicio. Por favor, inténtelo de nuevo más tarde.");
+          });
+      };
+    }]);
+  </script>
+</body>
+</html>

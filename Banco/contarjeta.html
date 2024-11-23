@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Con Tarjeta</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="imagenes/logo.png" type="image/png">
+  <script src="angular.min.js"></script>
+  <script>
+    var app = angular.module('Banco', []);
+    app.controller('inicioCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+      $scope.id = $location.search().id;
+      $scope.tarjeta = {
+        id: 0,
+        clienteID: 0,
+        tipo: "",
+        numeroTarjeta: "",
+        nip: "",
+        fechaVencimiento: "",
+        saldoActual: 0,
+        limiteCredito: 0,
+        cliente: {
+          id: 0,
+          nombre: "",
+          apellido: "",
+          correoElectronico: ""
+        }
+      }
+      $scope.atras = function () {
+        window.location.href = "menuprincipal.html";
+      }
+
+      $scope.irAOtrasOpciones = function () {
+        window.location.href = "OtrasOpciones.html#!/?id=" + $scope.id;
+      }
+
+      $scope.irretirar = function () {
+        window.location.href = "retirardinero.html#!/?id=" + $scope.id;
+      }
+
+      $scope.saldo = function () {
+        window.location.href = "consultarsaldo.html#!/?id=" + $scope.id;
+      }
+
+      $scope.movimientos = function () {
+        window.location.href = "movimientos.html#!/?id=" + $scope.id;
+      }
+
+      $scope.depositotarjeta = function () {
+        window.location.href = "depositotarjeta.html#!/?id=" + $scope.id;
+      }
+      $http.get('http://localhost:5006/api/Tarjeta/' + $scope.id).then(function (x) {
+        $scope.tarjeta = x.data;
+      }, function () {
+        alert('Error en el servido');
+      })
+
+
+
+
+    }])
+  </script>
+</head>
+
+<body ng-controller="inicioCtrl">
+  <div id="cajeroPrincipal" class="menu-principal">
+    <header>
+      <div class="logo-container">
+        <img src="imagenes/logo.png" alt="Logo del banco">
+        <h1>Bienvenido a StartBank {{tarjeta.cliente.nombre}} {{tarjeta.cliente.apellido}}</h1>
+      </div>
+      <h2>Opciones con Tarjeta</h2>
+    </header>
+    <main>
+      <section class="opciones-principales">
+        <div class="columna-izquierda">
+          <button id="retirar" ng-click="irretirar()">
+            <img src="imagenes/retiro.png" alt="Boton 1">
+            <span>Retirar Dinero</span>
+          </button>
+          <button id="boton3" ng-click="depositotarjeta()">
+            <img src="imagenes/deposito.png" alt="Boton 2">
+            <span>Depositar Dinero</span>
+          </button>
+        </div>
+        <div class="columna-derecha">
+          <div class="fila-superior">
+            <button id="boton3" ng-click="movimientos()">
+              <span>Movimientos</span>
+            </button>
+            <button id="boton4" onclick="window.location.href = 'pagina4.html'">
+              <span>Pagos</span>
+            </button>
+          </div>
+          <div class="fila-inferior">
+            <button id="saldo" ng-click="saldo()">
+              <span>Consulta Saldo</span>
+            </button>
+            <button id="OtrasOpciones.html" ng-click="irAOtrasOpciones()">
+              <span>Otras Operaciones</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <button id="salir" ng-click="atras()">SALIR</button>
+    </footer>
+  </div>
+</body>
+
+</html>

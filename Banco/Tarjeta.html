@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarjeta</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="imagenes/logo.png" type="image/png">
+  <script src="angular.min.js"></script>
+  <script>
+    var app = angular.module('Banco', []);
+    app.controller('inicioCtrl', ['$scope', '$http', function ($scope, $http) {
+      $scope.titulo = 'BancoStartbank';
+      $scope.tarjeta = "";
+      $scope.delete = function () {
+        $scope.tarjeta = $scope.tarjeta.slice(0, -1);
+      }
+      $scope.digits = function (i) { $scope.tarjeta += i; }
+      $scope.buscar = function () {
+        $http.get('http://localhost:5006/api/Tarjeta/details/' + $scope.tarjeta).then(function (resultado) {
+          if (resultado.data.status) {
+            let text;
+            if (confirm("Eres " + resultado.data.nombre) == true) {
+              window.location.href = 'Nip.html#!/?id=' + resultado.data.id;
+            } else {
+              alert("Cancelado");
+            }
+          }
+          else {
+            alert(resultado.data.mensaje);
+          }
+        }, function () {
+
+        })
+      }
+      $scope.confirmarCancelar = function () {
+        var confirmacion = confirm("¿Desea cancelar la operación?");
+        if (confirmacion) {
+          $scope.cancelarOperacion();
+        }
+      };
+
+      $scope.cancelarOperacion = function () {
+        window.location.href = "menuprincipal.html";
+      };
+    }
+    ]);
+  </script>
+</head>
+
+<body ng-controller="inicioCtrl">
+  <div id="cajero">
+    <header>
+      <div class="logo-container">
+        <img src="imagenes/logo.png" alt="Logo del banco">
+        <h1>Bienvenido a {{titulo}}</h1>
+      </div>
+      <h2>¡HOLA!</h2>
+    </header>
+
+    <main>
+      <section class="teclado">
+        <table>
+          <tr>
+            <td><button ng-click="digits('1')">1</button></td>
+            <td><button ng-click="digits('2')">2</button></td>
+            <td><button ng-click="digits('3')">3</button></td>
+          </tr>
+          <tr>
+            <td><button ng-click="digits('4')">4</button></td>
+            <td><button ng-click="digits('5')">5</button></td>
+            <td><button ng-click="digits('6')">6</button></td>
+          </tr>
+          <tr>
+            <td><button ng-click="digits('7')">7</button></td>
+            <td><button ng-click="digits('8')">8</button></td>
+            <td><button ng-click="digits('9')">9</button></td>
+          </tr>
+          <tr>
+            <td colspan="2"><button ng-click="delete()">BORRAR</button></td>
+            <td><button ng-click="digits('0')">0</button></td>
+          </tr>
+        </table>
+      </section>
+      <section class="pantalla">
+        <div class="numero-tarjeta">
+          <h1> INGRESA TU NÚMERO DE TARJETA</h1>
+          <h1>↓</h1>
+
+          <input ng-model="tarjeta" type="text" id="numero-tarjeta" maxlength="16">
+        </div>
+      </section>
+    </main>
+    <footer>
+      <button ng-click="buscar()">ACEPTAR</button>
+      <button id="salir" ng-click="confirmarCancelar()">CANCELAR</button>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

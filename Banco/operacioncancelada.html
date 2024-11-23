@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cancelando Operación</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #cfe2f3; /* Fondo azul pastel */
+    }
+
+    .container {
+      text-align: center;
+      background-color: #ffffff; /* Fondo blanco */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #ff0000; /* Color de texto rojo */
+    }
+
+    .loading-gif {
+      width: 100px; /* Ancho deseado */
+      height: auto; /* Altura ajustada automáticamente para mantener la proporción */
+      margin-top: 20px; /* Margen superior */
+    }
+  </style>
+</head>
+<body ng-controller="inicioCtrl">
+  <div class="container">
+    <h1>Cancelando Operación...</h1>
+    <img src="imagenes/Cargar.gif" alt="Cargando" class="loading-gif">
+  </div>
+  <script src="angular.min.js"></script>
+  <script>
+    var app = angular.module('Banco',[]);
+    app.controller('inicioCtrl', ['$scope','$http','$location', function ($scope, $http, $location){
+      $scope.id = $location.search().id;
+
+      // Obtener la tarjeta con la ID proporcionada
+      $http.get('http://localhost:5006/api/Tarjeta/'+ $scope.id)
+        .then(function(response){
+          $scope.tarjeta = response.data;
+          // Redirigir a contarjeta.html después de 4 segundos (4000 milisegundos)
+          setTimeout(function() {
+            window.location.href = "contarjeta.html#!/?id=" + $scope.id;
+          }, 1000);
+        })
+        .catch(function(error){
+          console.error('Error en la solicitud HTTP:', error);
+          alert('Error en el servidor');
+        });
+    }]);
+  </script>
+</body>
+</html>

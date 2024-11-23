@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Otras Opciones</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="imagenes/logo.png" type="image/png">
+  <script src="angular.min.js"></script>
+  <script>
+    var app = angular.module('Banco', []);
+    app.controller('inicioCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+      $scope.id = $location.search().id;
+      $scope.tarjeta = {
+        id: 0,
+        clienteID: 0,
+        tipo: "",
+        numeroTarjeta: "",
+        nip: "",
+        fechaVencimiento: "",
+        saldoActual: 0,
+        limiteCredito: 0,
+        cliente: {
+          id: 0,
+          nombre: "",
+          apellido: "",
+          correoElectronico: ""
+        }
+      };
+  
+      $scope.atras = function () {
+        window.location.href = "contarjeta.html#!/?id=" + $scope.id;
+      };
+  
+      $scope.irnipnuevo = function () {
+        window.location.href = "cambiarnip.html#!/?id=" + $scope.id;
+      };
+      $http.get('http://localhost:5006/api/Tarjeta/'+ $scope.id).then(function(x){
+      $scope.tarjeta=x.data;
+      },function(){
+        alert('Error en el servido');
+      })
+
+    }]);
+  </script>
+  
+
+</head>
+
+<body ng-controller="inicioCtrl">
+  <div id="cajero">
+    <header>
+      <div class="logo-container">
+        <img src="imagenes/logo.png" alt="Logo del banco">
+        <h1>Bienvenido {{tarjeta.cliente.nombre}} {{tarjeta.cliente.apellido}} a StartBank </h1>
+      </div>
+      <h2>Otras Opciones </h2>
+    </header>
+    <main>
+      <section class="opciones-tarjeta">
+        <button ng-click="irnipnuevo()">
+          <img src="imagenes/nip.png" alt="Tarjeta con imagen">
+          <span>Registrar nuevo Nip</span>
+        </button>
+        <button onclick="window.location.href = 'sintarjeta.html'">
+          <img src="imagenes/creditoeducativo.png" alt="Sin tarjeta">
+          <span>Crédito Educativo</span>
+        </button>
+      </section>
+    </main>
+    <footer>
+      <button id="salir" ng-click="atras()">SALIR</button>
+    </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos de la cuenta</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="imagenes/logo.png" type="image/png">
+    <script src="angular.min.js"></script>
+    <script>
+        angular.module('Banco', [])
+            .controller('inicioCtrl', function ($scope, $http, $location, $filter) {
+                $scope.id = $location.search().id;
+                $scope.tarjeta = {};
+                $scope.movimientos = [];
+
+                $scope.obtenerNumeroTarjeta = function (movimiento) {
+                    $http.get('http://localhost:5006/api/Tarjetas/cliente/' + movimiento.tarjetaOrigenID)
+                        .then(function (response) {
+                            movimiento.numeroCuentaOrigen = response.data.numeroTarjeta;
+                        })
+                        .catch(function (error) {
+                            console.error('Error al obtener número de tarjeta de origen:', error);
+                        });
+
+                    $http.get('http://localhost:5006/api/Tarjetas/cliente/' + movimiento.tarjetaDestinoID)
+                        .then(function (response) {
+                            movimiento.numeroCuentaDestino = response.data.numeroTarjeta;
+                        })
+                        .catch(function (error) {
+                            console.error('Error al obtener número de tarjeta de destino:', error);
+                        });
+                };
+
+                $scope.cargarMovimientos = function () {
+                    $http.get('http://localhost:5006/api/transacciones/last5/' + $scope.id)
+                        .then(function (response) {
+                            console.log(response.data);
+                            $scope.movimientos = response.data;
+                            angular.forEach($scope.movimientos, function (movimiento) {
+                                $scope.obtenerNumeroTarjeta(movimiento);
+                            });
+                        })
+                        .catch(function (error) {
+                            console.error('Error al cargar movimientos:', error);
+                        });
+                };
+
+
+                $scope.cargarTarjeta = function () {
+                    $http.get('http://localhost:5006/api/Tarjetas/' + $scope.id)
+                        .then(function (response) {
+                            console.log(response.data);
+                            $scope.tarjeta = response.data;
+                        })
+                        .catch(function (error) {
+                            console.error('Error al cargar tarjeta:', error);
+                        });
+                };
+
+                $scope.atras = function () {
+                    window.location.href = "contarjeta.html#!/?id=" + $scope.id;
+                };
+
+                // Formatear fecha a formato dd-mm-yyyy
+                $scope.formatoFecha = function (fecha) {
+                    return $filter('date')(new Date(fecha), 'dd-MM-yyyy');
+                };
+
+                $scope.cargarMovimientos();
+                $scope.cargarTarjeta();
+            });
+    </script>
+</head>
+
+<body ng-controller="inicioCtrl">
+    <header>
+        <div class="logo-container">
+            <img src="imagenes/logo.png" alt="Logo del banco">
+            <h1>Movimientos de la cuenta</h1>
+            <p>Consulta tus movimientos {{tarjeta.cliente.nombre}}</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="movimientos">
+            <h2>Movimientos de la cuenta</h2>
+            <table class="tabla-movimientos">
+                <thead>
+                    <tr>
+                        <th>Tipo de Transacción</th>
+                        <th>Monto</th>
+                        <th>Fecha de Transacción</th>
+                        <th>Número de Cuenta Origen</th>
+                        <th>Número de Cuenta Destino</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="movimiento in movimientos">
+                        <td>{{ movimiento.tipoTransaccion }}</td>
+                        <td>{{ '$' + movimiento.monto }}</td>
+                        <td>{{ formatoFecha(movimiento.fechaTransaccion) }}</td>
+                        <td>{{ movimiento.numeroCuentaOrigen }}</td>
+                        <td>{{ movimiento.numeroCuentaDestino }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <button id="salir" ng-click="atras()">SALIR</button>
+    </footer>
+</body>
+
+</html>

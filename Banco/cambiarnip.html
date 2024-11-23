@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambiar NIP</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="imagenes/logo.png" type="image/png">
+  <script src="angular.min.js"></script>
+  <script>
+    var app = angular.module('Banco', []);
+    app.controller('inicioCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
+      $scope.id = $location.search().id;
+      $scope.tarjeta = {};
+
+      $scope.delete = function() {
+        $scope.currentPIN = $scope.currentPIN.slice(0, -1);
+      }
+
+      $scope.digits = function(i) {
+        if ($scope.currentPIN.length < 4) {
+          $scope.currentPIN += i;
+        }
+      }
+
+      $scope.confirmarCancelar = function() {
+        if (confirm("¿Desea cancelar la operación?")) {
+          $scope.cancelarOperacion();
+        }
+      };
+
+      $scope.cancelarOperacion = function() {
+        window.location.href = "operacioncancelada.html#!/?id=" + $scope.id;
+      };
+
+      $scope.cambiarNIP = function() {
+        if ($scope.tarjeta.nip === $scope.currentPIN && $scope.newPIN === $scope.confirmPIN) {
+          $scope.tarjeta.nip = $scope.newPIN; // Actualizar el NIP en el objeto tarjeta
+          $http.put('http://localhost:5006/api/Tarjeta/' + $scope.id, $scope.tarjeta)
+            .then(function(response) {
+              alert("NIP cambiado exitosamente");
+              // Limpiar los campos de entrada
+              $scope.currentPIN = "";
+              $scope.newPIN = "";
+              $scope.confirmPIN = "";
+            })
+            .catch(function(error) {
+              alert("Error al cambiar el NIP. Por favor, inténtelo de nuevo más tarde.");
+            });
+        } else {
+          alert("NIP actual incorrecto o los nuevos NIP no coinciden");
+        }
+      }
+
+      // Obtener la tarjeta del servidor
+      $http.get('http://localhost:5006/api/Tarjeta/' + $scope.id)
+        .then(function(response) {
+          $scope.tarjeta = response.data;
+        })
+        .catch(function(error) {
+          alert('Error en el servidor al obtener la tarjeta');
+        });
+    }]);
+  </script>
+</head>
+
+<body  ng-controller="inicioCtrl">
+  <div class="container" >
+    <header>
+      <div class="logo-container">
+        <img src="imagenes/logo.png" alt="Logo del banco">
+        <h1>Bienvenido a StartBank</h1>
+      </div>
+      <h2>¡HOLA {{tarjeta.cliente.nombre}}</h2>
+    </header>
+
+    <div class="form-container">
+      <h2>Cambiar NIP</h2>
+      <form>
+        <div class="form-group">
+          <label for="currentPIN">NIP Actual</label>
+          <input type="password" id="currentPIN" name="currentPIN" ng-model="currentPIN" required>
+        </div>
+        <div class="form-group">
+          <label for="newPIN">Nuevo NIP</label>
+          <input type="password" id="newPIN" name="newPIN" ng-model="newPIN" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPIN">Confirmar Nuevo NIP</label>
+          <input type="password" id="confirmPIN" name="confirmPIN" ng-model="confirmPIN" required>
+          
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer>
+    
+    <button ng-click="confirmarCancelar()">CANCELAR</button>
+    <button id="button" ng-click="cambiarNIP()">CAMBIAR NIP</button>
+  </footer>
+</body>
+
+</html>

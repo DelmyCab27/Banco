@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="Banco">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otra cantidad</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="imagenes/logo.png" type="image/png">
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('Banco', []);
+        app.controller('inicioCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+          $scope.id = $location.search().id;
+          $scope.tarjeta = {
+            id: 0,
+            clienteID: 0,
+            tipo: "",
+            numeroTarjeta: "",
+            nip: "",
+            fechaVencimiento: "",
+            saldoActual: 0,
+            limiteCredito: 0,
+            cliente: {
+              id: 0,
+              nombre: "",
+              apellido: "",
+              correoElectronico: ""
+            }
+          }
+    
+          $scope.confirmarCancelar = function () {
+            var confirmacion = confirm("¿Desea cancelar la operación?");
+            if (confirmacion) {
+              $scope.cancelarOperacion();
+            }
+          };
+    
+          $scope.cancelarOperacion = function () {
+            window.location.href = "operacioncancelada.html#!/?id=" + $scope.id;
+          };
+    
+          $scope.retirar = function () {
+            // Convertir la cantidad a un número entero
+            var cantidad = parseInt($scope.otraCantidad);
+    
+            // Verificar si la cantidad es un número entero y si es un múltiplo de 50, 100, 500, 1000 o 200
+            if (isNaN(cantidad) || cantidad % 50 !== 0 || cantidad < 50 || cantidad > 9300) {
+              alert("Por favor, ingrese una cantidad válida (múltiplo de $50, $100, $500, $1000 o $200).");
+              return;
+            }
+    
+            // Mostrar mensaje de confirmación
+            var totalRetiro = cantidad;
+            var confirmacion = confirm("¿Está seguro de retirar $" + totalRetiro.toFixed(2) + "?");
+            if (confirmacion) {
+              if (totalRetiro <= $scope.tarjeta.saldoActual) {
+                var nuevoSaldo = $scope.tarjeta.saldoActual - totalRetiro;
+                $scope.actualizarSaldo(nuevoSaldo, totalRetiro);
+                $scope.redirigirARecibo();
+              } else {
+                alert("Fondos insuficientes");
+              }
+            }
+          };
+    
+          $http.get('http://localhost:5006/api/Tarjeta/' + $scope.id).then(function (x) {
+            $scope.tarjeta = x.data;
+          }, function () {
+            alert('Error en el servidor');
+          });
+    
+          $scope.actualizarSaldo = function (nuevoSaldo, cantidad) {
+            $scope.payload = {
+              id: $scope.tarjeta.id,
+              clienteID: $scope.tarjeta.clienteID,
+              tipo: $scope.tarjeta.tipo,
+              numeroTarjeta: $scope.tarjeta.numeroTarjeta,
+              nip: $scope.tarjeta.nip,
+              fechaVencimiento: $scope.tarjeta.fechaVencimiento,
+              saldoActual: nuevoSaldo,
+              limiteCredito: $scope.tarjeta.limiteCredito,
+              cliente: {
+                id: $scope.tarjeta.cliente.id,
+                nombre: $scope.tarjeta.cliente.nombre,
+                apellido: $scope.tarjeta.cliente.apellido,
+                correoElectronico: $scope.tarjeta.cliente.correoElectronico
+              }
+            };
+    
+            $http.put('http://localhost:5006/api/Tarjeta/' + $scope.id, $scope.payload)
+              .then(function (response) {
+                $scope.tarjeta.saldoActual = nuevoSaldo;
+                alert("Retiro exitoso de $" + cantidad);
+              })
+              .catch(function (error) {
+                alert("Error al procesar el retiro. Por favor, inténtelo de nuevo más tarde.");
+              });
+          };
+        }])
+      </script>
+    <style>
+        .custom-form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 350px;
+            padding: 16px;
+            border: 1px solid #9fc5e8;
+            border-radius: 10px;
+            background-color: #f5faff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 4rem;
+            border: 1px solid #9fc5e8;
+            border-radius: 5px;
+            padding: 60px;
+            background-color: #f5faff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-form-group label {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-align: left;
+            width: 100%;
+            margin-left: 20px;
+            /* Ajusta este valor según sea necesario */
+        }
+
+        .custom-form-group input[type="password"] {
+            width: 100%;
+            height: 70px;
+            border-radius: 5px;
+            border: 1px solid #9fc5e8;
+            padding: 0 10px;
+            font-size: 2rem;
+            box-sizing: border-box;
+        }
+
+        .custom-form-group button {
+            width: 100%;
+            height: 50px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .custom-form-group button:hover {
+            background-color: #45a049;
+        }
+
+        .other-amount {
+            display: none;
+        }
+
+        #otherAmount:checked+label+.other-amount {
+            display: block;
+        }
+    </style>
+
+<body ng-controller="inicioCtrl">
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="imagenes/logo.png" alt="Logo del banco">
+                <h1>Bienvenido a StartBank</h1>
+                <h2>Hola {{tarjeta.cliente.nombre}} {{tarjeta.cliente.apellido}}</h2>
+                <h3>Saldo Disponible: {{ tarjeta.saldoActual | currency }}</h3>
+                <h3>Maximo para retirar por dia: $9,300 </h3>
+
+            </div>
+        </header>
+
+        <div class="custom-form-container">
+            <h2 style="margin-left: 20px;">Otra Cantidad</h2>
+            <form id="otraCantidadForm" ng-submit="retirar()">
+                <div class="custom-form-group">
+                    <label style="margin-left: 20px;">Ingresa la cantidad:</label>
+                    <input id="otraCantidadInput" ng-model="otraCantidad" required>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <button id="salir" ng-click="confirmarCancelar()">REGRESAR</button>
+        <button type="submit" ng-click="retirar()">RETIRAR</button>
+
+    </footer>
+</body>
+
+</html>

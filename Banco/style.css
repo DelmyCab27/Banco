@@ -1,0 +1,373 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #E5E8E8 ; /* Fondo grisáceo */
+}
+
+#cajero {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  background-color: #2196f3; /* Color azul cielo */
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
+
+img {
+  width: 100px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 5px 0 0 0;
+}
+
+main {
+  flex: 1;
+  display: flex;
+}
+
+.opciones-tarjeta {
+    display: flex;
+    flex: 1;
+    justify-content: space-between; /* Distribuir los elementos horizontalmente */
+    padding: 10px 4%; /* Espacio de 5% a cada lado */
+    margin-top: 10px;
+  align-items: flex-start;
+
+}
+
+.opciones-tarjeta button {
+    width: 45%; /* Ancho del botón (el 10% se utiliza para el espacio entre ellos) */
+    height: 400px; /* Alto del botón */
+    border: none;
+    background-color:#5d7ed0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column; /* Apilar elementos verticalmente */
+    align-items: center; /* Centrar elementos horizontalmente */
+    justify-content: center;
+}
+
+.opciones-tarjeta img {
+    width: 250px;
+    margin: auto; /* Centrar la imagen horizontalmente */
+    margin-top: 50px; /* Espacio entre la imagen y el texto */
+}
+
+.opciones-tarjeta button span{
+    color: white; /* Color blanco para el texto */
+    font-weight: bold;
+    margin-bottom: 30px; /* Espacio entre la imagen y el texto */
+    font-size: 30px;
+}
+.opciones-tarjeta.especial button {
+  margin-right: 2%; /* Espacio entre los botones */
+  background-color: #A9CCE3; /* Cambiar color de fondo a rojo */
+  color: #ffffff; /* Cambiar color del texto a blanco */
+}
+.opciones-tarjeta.especial button img {
+  display: block;
+  margin: auto; /* Centrar la imagen horizontalmente */
+}
+
+.teclado {
+  width: 40%;
+  margin: 50px auto; /* Centrar el teclado y dejar espacio alrededor */
+  margin-left:100px; /* Alejar del borde izquierdo */
+}
+
+.teclado table {
+  width: 80%; /* Ancho completo de la tabla */
+  height: 100%; /* Altura completa de la tabla */
+  border-collapse: collapse;
+}
+
+.teclado table td {
+  width: 10%; /* Ancho reducido para los cuadros */
+  height: 10%; /* Altura reducida para los cuadros */
+  text-align: center;
+  font-size: 36px; /* Tamaño de fuente para los números */
+  cursor: pointer;
+  border: 1px solid #ccc;
+  font-family: 'Arial', sans-serif; /* Fuente */
+}
+
+.teclado table td button {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border:none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.teclado table td button:hover {
+  background-color: #87CEEB; /* Cambio de color al pasar el mouse */
+}
+
+.teclado table td button span {
+  display: block;
+  line-height: 50px; /* Centrar verticalmente el texto */
+}
+
+.pantalla {
+  width: 50%;
+  padding: 20px;
+  text-align: center;
+}
+
+.numero-tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar elementos horizontalmente */
+  justify-content: center; /* Centrar elementos verticalmente */
+  height: 100%;
+}
+
+.numero-tarjeta h1 {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.numero-tarjeta input {
+  width: calc(50% - 50px); /* Reducir el ancho para dejar espacio para la flecha */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 20px;
+  box-sizing: border-box;
+  text-align: center; 
+}
+
+.numero-tarjeta input::placeholder {
+  color: #aaa;
+}
+
+.numero-tarjeta input:focus {
+  border-color: #87CEFA; /* Color del borde al enfocar */
+  outline: none;
+}
+
+.numero-tarjeta.invalido {
+  border-color: #ff0000; /* Cambia el color del borde si es inválido */
+}
+
+footer {
+  background-color: #87CEFA; /* Color azul cielo */
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between; /* Distribuir los elementos del pie de página */
+}
+
+footer button {
+  width: 40%; /* Ancho reducido para dejar espacio entre los botones */
+  height: 60px;
+  border: none;
+  background-color: #3498db; /* Color de fondo de los botones */
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+footer button:hover {
+  background-color: #2980b9; /* Cambio de color al pasar el mouse */
+}
+.numero-tarjeta input[type="password"] {
+  width: calc(30% - 80px); /* Reducir el ancho para dejar espacio para la flecha */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size:20px;
+  box-sizing: border-box;
+  text-align: center; 
+}
+
+.opciones-principales {
+  display: flex;
+  flex: 1;
+  justify-content: space-between; /* Distribuir los elementos horizontalmente */
+  align-items: center;
+  padding: 5px 5%; /* Espacio de 5% a cada lado */
+  margin-top: 5px;
+}
+
+.columna-izquierda,
+.columna-derecha {
+  flex: 1; /* Ambas columnas ocupan el mismo espacio */
+}
+
+.columna-izquierda {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.columna-izquierda button {
+  width: 100%; /* Ancho completo */
+  height: 200px;
+  border: none;
+  background-color: #5d7ed0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px; /* Espaciado inferior */
+}
+
+.columna-izquierda img {
+  width: 20%;
+  height: auto;
+}
+
+.columna-izquierda span {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+.fila-superior
+{
+  margin: 10px;
+  justify-content: space-between;
+}
+.fila-inferior
+{
+  margin: 10px;
+  justify-content: space-between;
+}
+
+fila-inferior
+
+.columna-derecha {
+  display: flex;
+  flex: 1; /* Ahora ocupa la mitad disponible */
+  flex-direction: column;
+  align-items: center;
+  margin-left: 2%; /* Espacio de 2% a la izquierda del contenedor */
+  
+}
+
+.columna-derecha button {
+  width: 100%; /* Ahora ocupa casi todo el ancho disponible */
+  height: 96px;
+  border: none;
+  background-color: #5d7ed0;
+  cursor: pointer;
+  display: flex;
+  
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px; /* Espaciado inferior */
+  
+}
+
+.columna-derecha span {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+}
+.movimientos {
+    flex: 1; /* El contenido se expande verticalmente */
+    text-align: center;
+    min-height: calc(480px - 100px); /* Altura mínima para que llegue hasta el pie de página */
+    margin-top: 40px; /* Separación entre el encabezado y el contenido */
+}
+
+.movimientos table {
+    width: 80%;
+    margin: 0 auto; /* Centrar la tabla horizontalmente */
+    border-collapse: collapse;
+}
+
+.movimientos th, .movimientos td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.movimientos th {
+    background-color: #f2f2f2; /* Color de fondo de las celdas de encabezado */
+}
+
+/* Estilos para el formulario de cambio de NIP */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 400px;
+  padding: 20px;
+  border: 1px solid #9fc5e8;
+  border-radius: 10px;
+  background-color: #f5faff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+  border: 1px solid #9fc5e8;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f5faff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-group label {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.form-group input[type="password"] {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #9fc5e8;
+  padding: 0 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group button {
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.form-group button:hover {
+  background-color: #45a049;
+}
+.other-amount {
+  display: none;
+}
+#otherAmount:checked + label + .other-amount {
+  display: block;
+}
+.form-group label {
+  margin-left: 20px; /* Ajusta este valor según sea necesario */
+}
+
